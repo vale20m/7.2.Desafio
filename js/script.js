@@ -20,30 +20,14 @@ function showData(dataArray) {
 
 // Escribe el código necesario para realizar el fetch al archivo con los datos y mostrar los estudiantes con la función showData
 
-document.addEventListener("DOMContentLoaded", function () {
-  const container = document.getElementById("container");
+async function tomarEstudiantes(url){
+  let response = await fetch(url);
+  if (response.ok){
+    let responseContents = await response.json();
+    showData(responseContents.students);
+  } else {
+    alert("HTTP error: " + response.status);
+  }
+}
 
-  fetch("json/data.json")
-    .then(response => {
-      if (!response.ok) {
-        throw new Error("Error al obtener los datos");
-      }
-      return response.json();
-    })
-    .then(data => {
-      // Recorremos los datos del JSON y creamos elementos para mostrarlos en la página
-      data.forEach(student => {
-        const paragraph = document.createElement("p");
-        paragraph.textContent = `${student.name} ${student.lastname}`;
-        container.appendChild(paragraph);
-      });
-    })
-    .catch(error => {
-      console.error("Error:", error);
-    });
-});
-
-
-
-
-
+tomarEstudiantes(DATA_URL);
